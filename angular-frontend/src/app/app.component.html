@@ -5,22 +5,32 @@
     <input type="text" id="name" name="name" [(ngModel)]="userName">
     <button type="submit">Cerca</button> 
   </p>
+  
+  <div *ngIf="errorMessage" class="alert alert-warning" role="alert">
+    <strong>Warning! </strong>{{errorMessage_msg}}
+  </div>
 
-  <table class='table'>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>HTML Url</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let r of repos">
-        <td>{{r.id}}</td>
-        <td>{{r.name}}</td>
-        <td>{{r.html_url}}</td>
-        <td>{{r.description}}</td>
-    </tbody>
-  </table>
+  <div *ngIf="no_data_found" class="alert alert-primary" role="alert">
+    <strong>Info! </strong> {{no_data_found_msg}}
+  </div>
+
+  <div *ngIf="loaded">
+    <table class='table'>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>HTML Url</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of repos">
+          <td>{{r.id}}</td>
+          <td>{{r.name}}</td>
+          <td>{{r.html_url}}</td>
+          <td>{{r.description}}</td>
+      </tbody>
+    </table>
+  </div>
 </form>
