@@ -7,7 +7,7 @@
   </p>
   
   <div *ngIf="errorMessage" class="alert alert-warning" role="alert">
-    <strong>Warning! </strong>{{errorMessage_msg}}
+    <strong>Warning! </strong>{{errorMessage | json}}
   </div>
 
   <div *ngIf="no_data_found" class="alert alert-primary" role="alert">

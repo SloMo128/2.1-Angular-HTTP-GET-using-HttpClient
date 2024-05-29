@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { FormGroup } from '@angular/forms';
 import { GitHubRepos } from './model/repository';
 import { ApiGithHubServise } from './service/api.github.servise';
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
 
   repos: GitHubRepos[]=[];
   errorMessage: any;
-  errorMessage_msg:string = "L'utente Non esiste";
+  //errorMessage_msg:string = "L'utente Non esiste";
   loaded: boolean;
   no_data_found: boolean;
   no_data_found_msg: string = "Nessn dato trovato"
@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
     this.repos=[];
     this.gitHubService.getRepos(this.userName)
     .subscribe({
-      next: (response: GitHubRepos[]) => {
+      next: (response: GitHubRepos[]): void => {
         if (response.length != 0) {
           response.map((item: { id: any; name: any; html_url: any; description: any; }) => {
             this.repos.push({
@@ -82,13 +82,17 @@ export class AppComponent implements OnInit {
         }
           
       },
-      error: (err): void => {
+      error: (err: HttpErrorResponse ): void => {
+        this.no_data_found = false;
         this.errorMessage = {
-          statusCode: err.status,
-          message: err.error.message,
+          statusCode: err.status + ', ' + err.error.message,
+          //message: err.error.message
+          message: err.message.substring(0,err.message.indexOf( ": 404 OK" ))   // elimina ": 404 OK" dal messaggio
         };
+        console.log(`HttpErrorResponse body: ${JSON.stringify(err)}`);          // stampa di tutto l'HttpErrorResponse   
         this.loaded = false;
       },
+
       complete: () => {
         console.log('Request completed.');
         //this.loaded = true;
